@@ -1,0 +1,124 @@
+[gd_scene format=3 uid="uid://bs72ogkvdd7d6"]
+
+[ext_resource type="Script" uid="uid://be57kl86pisp0" path="res://addons/proto_controller/Player.gd" id="1_ucva2"]
+[ext_resource type="Script" uid="uid://dbaisx4wb54hq" path="res://health_component.gd" id="2_62hjw"]
+[ext_resource type="Script" uid="uid://b15hvvhxlwqxe" path="res://addons/health_bar.gd" id="3_q2ihv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iof21"]
+albedo_color = Color(0.91806, 0.575202, 0.222449, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ucva2"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_iof21"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wk43i"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ku5g"]
+bg_color = Color(0.7845099, 0.7845098, 1.5395124e-06, 1)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_62hjw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_moodu"]
+bg_color = Color(0.93333334, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q2ihv"]
+bg_color = Color(0, 0, 0, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dtglo"]
+bg_color = Color(4.776977e-06, 0.44810736, 0.079569705, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_detail = 1
+
+[node name="Player" type="CharacterBody3D" unique_id=2059663988]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_ucva2")
+can_sprint = true
+can_freefly = true
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1924719241]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+layers = 3
+material_override = SubResource("StandardMaterial3D_iof21")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_ucva2")
+
+[node name="Collider" type="CollisionShape3D" parent="." unique_id=1284826709]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_iof21")
+
+[node name="Head" type="Node3D" parent="." unique_id=25801135]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head" unique_id=20609040]
+transform = Transform3D(1, 0, 0, 0, 0.9769272, 0.2135727, 0, -0.2135727, 0.9769272, -0.1118083, 0.8218994, 3.177865)
+
+[node name="health_component" type="Node" parent="." unique_id=1808687532]
+script = ExtResource("2_62hjw")
+max_health = 100
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1614151078]
+
+[node name="HealthBarContainer" type="Control" parent="HUD" unique_id=1173551420]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 20.000004
+offset_top = 8.0
+offset_right = 320.0
+offset_bottom = 20.0
+
+[node name="DamageTrail" type="ProgressBar" parent="HUD/HealthBarContainer" unique_id=109282396]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_wk43i")
+theme_override_styles/fill = SubResource("StyleBoxFlat_2ku5g")
+show_percentage = false
+
+[node name="HealthBar" type="ProgressBar" parent="HUD/HealthBarContainer" unique_id=1487685240]
+material = SubResource("CanvasItemMaterial_62hjw")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 1
+theme_override_styles/fill = SubResource("StyleBoxFlat_moodu")
+step = 1.0
+show_percentage = false
+script = ExtResource("3_q2ihv")
+
+[node name="StaminaBar" type="ProgressBar" parent="HUD" unique_id=949233983]
+offset_left = 21.0
+offset_top = 21.0
+offset_right = 321.0
+offset_bottom = 33.0
+theme_override_styles/background = SubResource("StyleBoxFlat_q2ihv")
+theme_override_styles/fill = SubResource("StyleBoxFlat_dtglo")
+step = 1.0
+show_percentage = false
