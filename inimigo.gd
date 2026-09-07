@@ -10,37 +10,34 @@ enum State { IDLE, CHASING, ATTACKING, RETURNING }
 @export var chase_speed: float = 200.0
 @export var attack_damage: float = 15.0
 @export var attack_cooldown: float = 1.2
-@export var leash_range: float = 15.0   # distância máxima do spawn antes de desistir e voltar
+@export var leash_range: float = 15.0
+@export var deceleration: float = 800.0   # velocidade de frenagem ao entrar em IDLE
 
 var current_state: State = State.IDLE
 var target: Node3D = null
 var _attack_timer: float = 0.0
 var _spawn_position: Vector3
+var _spawn_captured: bool = false
 
-##@onready var floating_bar: FloatingHealthBar = $FloatingHealthBar
 @onready var detection_area: Area3D = $Area3D
+@onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 
 func _ready() -> void:
-	
-	print("Spawn registrado em: ", _spawn_position)
-	##floating_bar.bind_to(health_component)
-	##health_component.died.connect(_on_died)
 	detection_area.body_entered.connect(_on_body_entered)
 	detection_area.body_exited.connect(_on_body_exited)
-
-var _spawn_captured: bool = false
+	
 
 func _physics_process(delta: float) -> void:
 	apply_gravity(delta)
-	print("RETURNING para: ", _spawn_position, " | Posição atual: ", global_position)
+
 	if not _spawn_captured:
 		_spawn_position = global_position
 		_spawn_captured = true
 
 	match current_state:
 		State.IDLE:
-			velocity.x = move_toward(velocity.x, 0, move_speed)
-			velocity.z = move_toward(velocity.z, 0, move_speed)
+			velocity.x = move_toward(velocity.x, 0, deceleration * delta)
+			velocity.z = move_toward(velocity.z, 0, deceleration * delta)
 		State.CHASING:
 			_chase_target(delta)
 		State.ATTACKING:
@@ -55,7 +52,6 @@ func _chase_target(delta: float) -> void:
 		current_state = State.IDLE
 		return
 
-	# Checa o leash: se afastou demais do spawn, desiste e volta
 	var distance_from_spawn := global_position.distance_to(_spawn_position)
 	if distance_from_spawn > leash_range:
 		target = null
@@ -67,17 +63,19 @@ func _chase_target(delta: float) -> void:
 		current_state = State.ATTACKING
 		return
 
-	var direction := (target.global_position - global_position).normalized()
-	velocity.x = direction.x * chase_speed
-	velocity.z = direction.z * chase_speed
-	look_at(Vector3(target.global_position.x, global_position.y, target.global_position.z))
+	nav_agent.target_position = target.global_position
+	nav_agent.target_position = target.global_position
+	print("Path size: ", nav_agent.get_current_navigation_path().size(),
+	" | Nav finished: ", nav_agent.is_navigation_finished(),
+	" | Agent pos: ", global_position,
+	" | Next point: ", nav_agent.get_next_path_position())
+	_move_along_path(chase_speed)
 
 func _try_attack(delta: float) -> void:
 	if not target:
 		current_state = State.IDLE
 		return
 
-	# Mesmo atacando, se o alvo se afastar e ultrapassar o leash, desiste
 	var distance_from_spawn := global_position.distance_to(_spawn_position)
 	if distance_from_spawn > leash_range:
 		target = null
@@ -105,27 +103,30 @@ func _return_to_spawn(delta: float) -> void:
 		current_state = State.IDLE
 		return
 
-	var direction := (_spawn_position - global_position).normalized()
-	velocity.x = direction.x * chase_speed
-	velocity.z = direction.z * chase_speed
-	
-	var look_target := Vector3(_spawn_position.x, global_position.y, _spawn_position.z)
-	if not look_target.is_equal_approx(global_position):
-		look_at(look_target)
+	nav_agent.target_position = _spawn_position
+	_move_along_path(chase_speed)
 
 func _on_body_entered(body: Node3D) -> void:
-	print(">>> ENTROU: ", body.name, " | Estado atual antes: ", State.keys()[current_state])
-	if body.is_in_group("player") and current_state != State.RETURNING:
+	if body.is_in_group("player"):
 		target = body
 		current_state = State.CHASING
-		print(">>> Mudou para CHASING")
+
+func _move_along_path(speed: float) -> void:
+	if nav_agent.is_navigation_finished():
+		return
+	
+	var next_path_position := nav_agent.get_next_path_position()
+	var direction := (next_path_position - global_position).normalized()
+	velocity.x = direction.x * speed
+	velocity.z = direction.z * speed
+	
+	if direction.length() > 0.01:
+		look_at(Vector3(next_path_position.x, global_position.y, next_path_position.z))
 
 func _on_body_exited(body: Node3D) -> void:
-	print(">>> SAIU: ", body.name)
 	if body == target:
 		target = null
-		current_state = State.IDLE
-		print(">>> Voltou para IDLE (target saiu)")
+		current_state = State.RETURNING   # antes ia pra IDLE — agora tenta voltar ao spawn de verdade
 
 func _on_died() -> void:
 	die()
