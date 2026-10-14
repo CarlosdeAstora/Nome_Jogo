@@ -1,15 +1,66 @@
 [gd_scene format=3 uid="uid://bs72ogkvdd7d6"]
 
-[ext_resource type="Script" uid="uid://be57kl86pisp0" path="res://addons/proto_controller/Player.gd" id="1_ucva2"]
+[ext_resource type="Script" uid="uid://be57kl86pisp0" path="res://addons/player/Player.gd" id="1_ucva2"]
+[ext_resource type="PackedScene" uid="uid://dcol1m4rrxrix" path="res://Paladin J Nordstrom.fbx" id="2_3hj7b"]
 [ext_resource type="Script" uid="uid://dbaisx4wb54hq" path="res://health_component.gd" id="2_62hjw"]
+[ext_resource type="PackedScene" uid="uid://u88ro4lnsnt7" path="res://Zweihander.glb" id="3_6su6n"]
 [ext_resource type="Script" uid="uid://b15hvvhxlwqxe" path="res://addons/health_bar.gd" id="3_q2ihv"]
+[ext_resource type="AnimationLibrary" uid="uid://0hatmsmlt4mh" path="res://Animations/2hand Idle.fbx" id="4_4l4um"]
+[ext_resource type="AnimationLibrary" uid="uid://dkbyld4qs5mxm" path="res://Animations/Two Hand Sword Combo.fbx" id="5_cjk68"]
+[ext_resource type="AnimationLibrary" uid="uid://btlqshrkpxvvv" path="res://Animations/Two Handed Sword Death.fbx" id="6_oyvw4"]
+[ext_resource type="AnimationLibrary" uid="uid://dijcyijtbpfgs" path="res://Animations/Universal Animation Library[Standard]/Unreal-Godot/UAL1_Standard.glb" id="7_30rox"]
+[ext_resource type="AnimationLibrary" uid="uid://do4trvcf6vclf" path="res://Animations/Universal Animation Library 2[Standard]/Unreal-Godot/UAL2_Standard.glb" id="8_enb27"]
+[ext_resource type="AnimationLibrary" uid="uid://8jig1wh0i54g" path="res://Animations/great sword blocking (2).fbx" id="9_f25i2"]
+[ext_resource type="AnimationLibrary" uid="uid://h8vguqmllbbg" path="res://Animations/great sword blocking (3).fbx" id="10_r81xa"]
+[ext_resource type="AnimationLibrary" uid="uid://din6vm68srpko" path="res://Animations/great sword blocking.fbx" id="11_gosiu"]
+[ext_resource type="AnimationLibrary" uid="uid://buf3ah0eyktpd" path="res://Animations/great sword idle.fbx" id="12_ygp7m"]
+[ext_resource type="AnimationLibrary" uid="uid://buuubvlr8y6mr" path="res://Animations/great sword idle (2).fbx" id="13_087jw"]
+[ext_resource type="AnimationLibrary" uid="uid://csx4yt4xi8n3h" path="res://Animations/great sword idle (3).fbx" id="14_lvj6d"]
+[ext_resource type="AnimationLibrary" uid="uid://cs3vs7soggqj6" path="res://Animations/great sword idle (4).fbx" id="15_r4r8e"]
+[ext_resource type="AnimationLibrary" uid="uid://5q0yni1diyly" path="res://Animations/great sword run.fbx" id="16_cjk68"]
+[ext_resource type="AnimationLibrary" uid="uid://c6f5b33t4smaf" path="res://Animations/great sword slash.fbx" id="16_viy2e"]
+[ext_resource type="AnimationLibrary" uid="uid://cpo8bwrbowmtp" path="res://Animations/great sword run (2).fbx" id="17_oyvw4"]
+[ext_resource type="AnimationLibrary" uid="uid://1v73c5tyqs7c" path="res://Animations/great sword strafe (3).fbx" id="17_xl0ja"]
+[ext_resource type="AnimationLibrary" uid="uid://o5uewh8msyo5" path="res://Animations/great sword strafe.fbx" id="18_age4h"]
+[ext_resource type="AnimationLibrary" uid="uid://bm67g28yidrtl" path="res://Animations/great sword strafe (4).fbx" id="19_gpw72"]
+[ext_resource type="AnimationLibrary" uid="uid://d4mrlx0465k7k" path="res://Animations/great sword strafe (2).fbx" id="20_38mdc"]
+[ext_resource type="AnimationLibrary" uid="uid://c6vaqirg4162d" path="res://Animations/great sword turn (2).fbx" id="21_4xus4"]
+[ext_resource type="AnimationLibrary" uid="uid://ed61nrd743ja" path="res://Animations/great sword turn.fbx" id="22_s7og7"]
+[ext_resource type="AnimationLibrary" uid="uid://phwo1wbfrhr6" path="res://Animations/great sword walk (2).fbx" id="23_tw8v1"]
+[ext_resource type="AnimationLibrary" uid="uid://d3iv5sic8woln" path="res://Animations/great sword walk.fbx" id="24_dxan5"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iof21"]
-albedo_color = Color(0.91806, 0.575202, 0.222449, 1)
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_p2ecq"]
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_ucva2"]
-radius = 0.4
-height = 1.8
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_s463x"]
+animation = &"UAL1_Standard/Roll"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_30rox"]
+animation = &"great sword idle/mixamo_com"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_enb27"]
+animation = &"great sword run forwards/mixamo_com"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_f25i2"]
+animation = &"great sword walk back/mixamo_com"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_r81xa"]
+animation = &"great sword walk forwards/mixamo_com"
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_u0ya7"]
+allow_transition_to_self = true
+states/End/position = Vector2(1159, 100)
+states/Start/position = Vector2(57, 100)
+states/UAL1_Standard_Roll/node = SubResource("AnimationNodeAnimation_s463x")
+states/UAL1_Standard_Roll/position = Vector2(492, 202)
+"states/great sword idle_mixamo_com/node" = SubResource("AnimationNodeAnimation_30rox")
+"states/great sword idle_mixamo_com/position" = Vector2(133, 202)
+"states/great sword run forwards_mixamo_com/node" = SubResource("AnimationNodeAnimation_enb27")
+"states/great sword run forwards_mixamo_com/position" = Vector2(722, 318.7992)
+"states/great sword walk back_mixamo_com/node" = SubResource("AnimationNodeAnimation_f25i2")
+"states/great sword walk back_mixamo_com/position" = Vector2(357, 100)
+"states/great sword walk forwards_mixamo_com/node" = SubResource("AnimationNodeAnimation_r81xa")
+"states/great sword walk forwards_mixamo_com/position" = Vector2(332, 318.7992)
+graph_offset = Vector2(0, -24.200827)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_iof21"]
 radius = 0.4
@@ -57,22 +108,57 @@ script = ExtResource("1_ucva2")
 can_sprint = true
 can_freefly = true
 
-[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1924719241]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
-layers = 3
-material_override = SubResource("StandardMaterial3D_iof21")
-cast_shadow = 0
-mesh = SubResource("CapsuleMesh_ucva2")
+[node name="Paladin J Nordstrom" parent="." unique_id=566725582 instance=ExtResource("2_3hj7b")]
+transform = Transform3D(-1.1999243, 0, -0.013483613, 0, 1.2, 0, 0.013483613, 0, -1.1999243, 0, 0, 0)
+
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="Paladin J Nordstrom/GeneralSkeleton" parent_id_path=PackedInt32Array(566725582, 1472164572) index="2" unique_id=458501191]
+transform = Transform3D(0, -1, 0, 0, 0, -1, 1, 0, 0, -0.65516514, 1.4461199, -0.04703412)
+bone_name = "RightHand"
+bone_idx = 36
+
+[node name="Zweihander" parent="Paladin J Nordstrom/GeneralSkeleton/BoneAttachment3D" unique_id=120989878 instance=ExtResource("3_6su6n")]
+transform = Transform3D(-0.0904586, -0.98223776, 0.1644084, 0.8624071, -0.1598207, -0.48032743, 0.49807107, 0.09833728, 0.86154336, 1.3852061, 0.30577815, -0.1110878)
+
+[node name="AnimationPlayer" parent="Paladin J Nordstrom" index="1" unique_id=1227145343]
+"libraries/2hand Idle" = ExtResource("4_4l4um")
+libraries/Protagonista = SubResource("AnimationLibrary_p2ecq")
+"libraries/Two Hand Sword Combo" = ExtResource("5_cjk68")
+"libraries/Two Handed Sword Death" = ExtResource("6_oyvw4")
+libraries/UAL1_Standard = ExtResource("7_30rox")
+libraries/UAL2_Standard = ExtResource("8_enb27")
+"libraries/great sword blocking (2) block" = ExtResource("9_f25i2")
+"libraries/great sword blocking (3) recovery" = ExtResource("10_r81xa")
+"libraries/great sword blocking 1 parry" = ExtResource("11_gosiu")
+"libraries/great sword idle" = ExtResource("12_ygp7m")
+"libraries/great sword idle (2)" = ExtResource("13_087jw")
+"libraries/great sword idle (3)" = ExtResource("14_lvj6d")
+"libraries/great sword idle (4)" = ExtResource("15_r4r8e")
+"libraries/great sword run backwards" = ExtResource("16_cjk68")
+"libraries/great sword run forwards" = ExtResource("17_oyvw4")
+"libraries/great sword slash" = ExtResource("16_viy2e")
+"libraries/great sword strafe left fast" = ExtResource("17_xl0ja")
+"libraries/great sword strafe left slow" = ExtResource("18_age4h")
+"libraries/great sword strafe right fast" = ExtResource("19_gpw72")
+"libraries/great sword strafe right slow" = ExtResource("20_38mdc")
+"libraries/great sword turn left" = ExtResource("21_4xus4")
+"libraries/great sword turn right" = ExtResource("22_s7og7")
+"libraries/great sword walk back" = ExtResource("23_tw8v1")
+"libraries/great sword walk forwards" = ExtResource("24_dxan5")
+
+[node name="AnimationTree" type="AnimationTree" parent="Paladin J Nordstrom/AnimationPlayer" index="0" unique_id=1758548530]
+root_node = NodePath("../..")
+tree_root = SubResource("AnimationNodeStateMachine_u0ya7")
+anim_player = NodePath("..")
 
 [node name="Collider" type="CollisionShape3D" parent="." unique_id=1284826709]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_iof21")
 
+[node name="Camera3D" type="Camera3D" parent="." unique_id=20609040]
+transform = Transform3D(1, 0, 0, 0, 0.9769272, 0.2135727, 0, -0.2135727, 0.9769272, -0.1118083, 2.5218995, 3.177865)
+
 [node name="Head" type="Node3D" parent="." unique_id=25801135]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
-
-[node name="Camera3D" type="Camera3D" parent="Head" unique_id=20609040]
-transform = Transform3D(1, 0, 0, 0, 0.9769272, 0.2135727, 0, -0.2135727, 0.9769272, -0.1118083, 0.8218994, 3.177865)
 
 [node name="health_component" type="Node" parent="." unique_id=1808687532]
 script = ExtResource("2_62hjw")
@@ -122,3 +208,5 @@ theme_override_styles/background = SubResource("StyleBoxFlat_q2ihv")
 theme_override_styles/fill = SubResource("StyleBoxFlat_dtglo")
 step = 1.0
 show_percentage = false
+
+[editable path="Paladin J Nordstrom"]
